@@ -1,0 +1,30 @@
+name: Sync to Gitee
+
+on:
+  push:                        # 当仓库有 push 时触发
+    branches:
+      - main                   # 要同步的分支（可自定义）
+  schedule:                    # 可选：每天定时运行（UTC 时间）
+    - cron: '0 0 * * *'        # 每天 00:00 UTC，即北京时间 08:00
+  workflow_dispatch:           # 可手动触发
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout GitHub Repo
+      uses: actions/checkout@v2
+
+    - name: Set up Git user
+      run: |
+        git config --global user.name "${{ secrets.GITEE_USER }}"
+        git config --global user.email "${{ secrets.GITEE_USER }}@users.noreply.github.com"
+
+    - name: Push to Gitee
+      run: |
+        # 添加 Gitee 远程仓库地址（使用 token 登录）
+        git remote add gitee https://${{ secrets.GITEE_USER }}:${{ secrets.GITEE_TOKEN }}@gitee.com/${{ secrets.GITEE_USER }}/promptHub.git
+        
+        # 强制推送到 main 分支（避免冲突）
+        git push --force gitee main
