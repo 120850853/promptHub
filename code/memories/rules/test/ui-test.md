@@ -16,6 +16,7 @@ description: 主要调试界面报错
   - stagewise插件
   - playwright
   - Browser Tools
+  - Chrome DevTools MCP
 
 进行 UI 自动化测试的时候，可以给一些引导提示：
 
